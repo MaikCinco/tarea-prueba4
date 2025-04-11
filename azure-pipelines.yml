@@ -1,0 +1,28 @@
+trigger:
+- main  # o tu rama principal
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  CHROMEDRIVER_PATH: 'C:\hostedtoolcache\windows\chromedriver\112.0.5615.49\chromedriver.exe'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.11'
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r nba_automation/requirements.txt
+  displayName: 'Install dependencies'
+
+- script: |
+    pytest nba_automation/tests --junitxml=test-results/results.xml
+  displayName: 'Run tests with pytest'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/test-results/results.xml'
+    failTaskOnFailedTests: true
