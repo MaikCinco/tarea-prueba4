@@ -1,5 +1,5 @@
 trigger:
-- main  # o tu rama principal
+- main  
 
 pool:
   vmImage: 'windows-latest'
